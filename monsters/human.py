@@ -28,6 +28,7 @@ class Human(monsters.Monsters):
         x, y = self.new_position(DIRECTION[direction][0], DIRECTION[direction][1])
         neighbor = place.who_here(x,y)
         if not isinstance(neighbor, Wall):
+            old_x, old_y = self.position
             self.turn(direction)
             self.image = self.directed_bitmap[direction]
             self.rect.topleft = (x * SPRITE_SIZE_X, y * SPRITE_SIZE_Y,)
