@@ -8,18 +8,18 @@ Description: small game roguestyle
 '''
 #TODO:
 """
-!!!! ошибка при генерации лабиринта
-1. старт персонажа с лестницы вверх
-3. обработка искулюченией заинтересованными объектами (битва с котикаи )
-4 объединить картинки спрайтов в наборы, анимация движения живых объектов
-5. Добавить РПГ параметры монстрам
-6. вводим разрушаемость стен. 
-6. переход на 1 слой вверх-вниз
-6. показ инвентаря. операции с инвентарем.
-6. крафт?
-7. сохранение игры и состояния уровней в файлы
-8. Класс эффектов, хинтов, вопросов
-REFACTORING!!!!!
+- !!!! ошибка при генерации лабиринта
+- обработка искулюченией заинтересованными объектами (битва с котикаи )
+- объединить картинки спрайтов в наборы, анимация движения живых объектов
+- разобраться с ресурсами (символы, графнаборы етк)
+- Добавить РПГ параметры монстрам
+- вводим разрушаемость стен. 
+- переход на 1 слой вверх-вниз
+- показ инвентаря. операции с инвентарем.
+- крафт?
+- сохранение игры и состояния уровней в файлы
+- Класс эффектов, хинтов, вопросов
+- REFACTORING!!!!!
 
 """
 
@@ -216,6 +216,8 @@ class Level(object):
                     object_name = get_key(LADDER_OBJECTS, in_cells)
                     sprite = globals().get(object_name)(x,y) 
                     self.ladders.add(sprite)
+                    if object_name == "LadderUp":
+                        self.init_human_position = (x,y,)
 
     def put_object(self, obj):
         """ размещает объект в игровом мире """
@@ -288,15 +290,10 @@ class Game(object):
             maze = self.world.prev()
         else: 
             maze = self.world.get_level(self.world.current)
-#        self.level.regenerate(maze)
         self.level.init(maze)
         rect = self.log_surface.get_rect()
         self.log_surface.fill ((0,0,0,0),rect) 
-        while 1:
-            x = random.randint(0,SIZE_X-1)
-            y = random.randint(0,SIZE_Y-1)
-            if self.level.who_here(x,y)== None:
-                break
+        x,y = self.level.init_human_position
         self.human.arrange(x,y)
         
 

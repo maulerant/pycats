@@ -17,3 +17,11 @@ class Ladder(objects.Objects):
         """docstring for __init__"""
         objects.Objects.__init__(self, x, y)
         self.load_single_image()
+
+class LadderUp(Ladder):
+    """docstring for LadderUp"""
+    name = "ladderup"
+        
+class LadderDown(Ladder):
+    """docstring for LadderDown"""
+    name = "ladderdown"

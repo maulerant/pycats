@@ -51,15 +51,17 @@ OBJECTS_IMAGES = { "human": {   K_DOWN:os.path.join(RESOURCE_DIR,GAMER_AVATAR,"d
                                 K_LEFT:os.path.join(RESOURCE_DIR,"animal","left.gif"), 
                                 K_RIGHT:os.path.join(RESOURCE_DIR,"animal","right.gif"),},
                     "not_visited": os.path.join(RESOURCE_DIR,"not_visited.gif"), 
-                    "ladder": os.path.join(RESOURCE_DIR, "ladder.gif"),}
+                    "ladder": os.path.join(RESOURCE_DIR, "ladder.gif"),
+                    "ladderup": os.path.join(RESOURCE_DIR, "ladderup.gif"),
+                    "ladderdown": os.path.join(RESOURCE_DIR, "ladderdown.gif"),}
 
 
 # objects count for fill game place
 
-LADDER_OBJECTS_COUNTS = { "Ladder": 2,}
+LADDER_OBJECTS_COUNTS = { "LadderUp": 1,"LadderDown": 1,}
 UNLIFE_OBJECTS_COUNTS = { "Sausage": 4, }
 LIFE_OBJECTS_COUNTS = { "Animal": 7, }
-LADDER_OBJECTS = { "Ladder": ">",}
+LADDER_OBJECTS = { "LadderUp": ">","LadderDown": "<",}
 UNLIFE_OBJECTS = { "Sausage": "@", }
 LIFE_OBJECTS = { "Animal": "*", }
 
