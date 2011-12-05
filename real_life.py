@@ -14,7 +14,6 @@ Description: small game roguestyle
 - разобраться с ресурсами (символы, графнаборы етк)
 - Добавить РПГ параметры монстрам
 - вводим разрушаемость стен. 
-- переход на 1 слой вверх-вниз
 - показ инвентаря. операции с инвентарем.
 - крафт?
 - сохранение игры и состояния уровней в файлы
@@ -64,9 +63,7 @@ class Game(object):
         self.background = pygame.image.load(OBJECTS_IMAGES["clear"]).convert()
         self.human = Human(0,0)
         self.world = World()
-#        for i in range(self.world.levels_number):
-#            self.world.lvl_print(i)
-        self.level = Level()
+        self.level = self.world.first()
         self.combatlog = combatlog.CombatLog()
         log_rect = pygame.Rect((0,self.window.get_rect().height - STATUS_LINE_HEIGHT), (self.window.get_rect().width, STATUS_LINE_HEIGHT))
         self.log_surface = self.window.subsurface(log_rect)
@@ -75,14 +72,13 @@ class Game(object):
     def init_lvl(self, level):
         """docstring for init_lvl"""
         if level == 0:
-            maze = self.world.first()
+            self.level = self.world.first()
         elif level == 1:
-            maze = self.world.next()
+            self.level = self.world.next()
         elif level == -1:
-            maze = self.world.prev()
+            self.level = self.world.prev()
         else: 
-            maze = self.world.get_level(self.world.current)
-        self.level.init(maze)
+            self.level = self.world.get_level(self.world.current)
         rect = self.log_surface.get_rect()
         self.log_surface.fill ((0,0,0,0),rect) 
         x,y = self.level.init_human_position
@@ -117,7 +113,13 @@ class Game(object):
                     self.combatlog.push(ladders.to_log())
                 
             elif event.type == KEYDOWN and event.key == K_F1:
-                self.init_lvl(1)
+                ladders = pygame.sprite.spritecollide(self.human,self.level.ladders, False)
+                if ladders != None:
+                    for ladder in ladders:
+                        if isinstance(ladder,LadderUp):
+                            self.init_lvl(-1)
+                        elif isinstance(ladder, LadderDown):
+                            self.init_lvl(1)
 
             elif event.type == KEYDOWN and event.key == K_F2:
                 self.combatlog.draw(self.window)
@@ -145,6 +147,7 @@ def main():
     game.init_lvl(0)
 
     pygame.display.flip()
+
 
     while True:
         game.event()
