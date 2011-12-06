@@ -9,12 +9,14 @@ Description: small game roguestyle
 #TODO:
 """
 - !!!! ошибка при генерации лабиринта
+- ошибка размещения персонажа при преходе с уровня на уровень
 - обработка искулюченией заинтересованными объектами (битва с котикаи )
 - объединить картинки спрайтов в наборы, анимация движения живых объектов
 - разобраться с ресурсами (символы, графнаборы етк)
 - Добавить РПГ параметры монстрам
 - вводим разрушаемость стен. 
-- показ инвентаря. операции с инвентарем.
+- показ инвентаря. 
+- oперации с инвентарем (push, pop).
 - крафт?
 - сохранение игры и состояния уровней в файлы
 - Класс эффектов, хинтов, вопросов
@@ -61,13 +63,25 @@ class Game(object):
         self.clock = pygame.time.Clock()
         self.window = pygame.display.set_mode((SCREEN_SIZE_X,SCREEN_SIZE_Y))
         self.background = pygame.image.load(OBJECTS_IMAGES["clear"]).convert()
+#!!!! init inventory window
+        self.inventory_window =pygame.Surface((INV_WINDOW_SIZE_X * SPRITE_SIZE_X,INV_WINDOW_SIZE_Y * SPRITE_SIZE_Y))
+        self.iw_bg = pygame.image.load(OBJECTS_IMAGES["inventory"]).convert()
+#!!!!
         self.human = Human(0,0)
         self.world = World()
         self.level = self.world.first()
         self.combatlog = combatlog.CombatLog()
+        self.inventory = False
         log_rect = pygame.Rect((0,self.window.get_rect().height - STATUS_LINE_HEIGHT), (self.window.get_rect().width, STATUS_LINE_HEIGHT))
         self.log_surface = self.window.subsurface(log_rect)
         
+    def draw_iw(self):
+        """docstring for draw_iw"""
+        for x in range(INV_WINDOW_SIZE_X):
+            for y in range(INV_WINDOW_SIZE_Y):
+                rect = self.iw_bg.get_rect()
+                rect.topleft = (x * SPRITE_SIZE_X, y * SPRITE_SIZE_Y)
+                self.inventory_window.blit(self.iw_bg, rect)
 
     def init_lvl(self, level):
         """docstring for init_lvl"""
@@ -107,11 +121,13 @@ class Game(object):
                             message = enemye.combat(self.level.messages)
                         except Combat as combat:
                             self.combatlog.push(combat.to_log())
-                except MoveFindItem as finditems:
-                    self.combatlog.push(finditems.to_log())
                 except FindLadder as ladders:
                     self.combatlog.push(ladders.to_log())
-                
+            elif event.type == KEYDOWN and event.key == K_p:
+                try:
+                    self.human.collect(self.level)    
+                except MoveFindItem as finditems:
+                    self.combatlog.push(finditems.to_log())
             elif event.type == KEYDOWN and event.key == K_F1:
                 ladders = pygame.sprite.spritecollide(self.human,self.level.ladders, False)
                 if ladders != None:
@@ -123,6 +139,8 @@ class Game(object):
 
             elif event.type == KEYDOWN and event.key == K_F2:
                 self.combatlog.draw(self.window)
+            elif event.type == KEYDOWN and event.key == K_i:
+                self.inventory = not self.inventory
 
     def update(self):
         """docstring for update"""
@@ -134,7 +152,17 @@ class Game(object):
         self.draw_bg(self.window, self.background)
         self.level.draw(self.window)
         self.human.draw(self.window)
-        if self.human.item_count() == UNLIFE_OBJECTS_COUNTS["Sausage"]:
+        if self.inventory:
+            self.draw_iw()
+            self.human.inventory.draw(self.inventory_window)
+            rect = self.window.get_rect()
+            x,y = rect.width, rect.height
+            rect= self.inventory_window.get_rect()
+            d_x, d_y = rect.width/2, rect.height/2
+
+            self.window.blit(self.inventory_window, (x/2 - d_x, y/2 - d_y))
+
+        if False and self.human.item_count() == UNLIFE_OBJECTS_COUNTS["Sausage"]:
             message = _("You find all sausage")
             font = pygame.font.Font(None, 24)
             text = font.render(message, 1, (255,250,250))

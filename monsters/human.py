@@ -33,11 +33,6 @@ class Human(monsters.Monsters):
             self.image = self.directed_bitmap[direction]
             self.rect.topleft = (x * SPRITE_SIZE_X, y * SPRITE_SIZE_Y,)
             self.look_around(place)
-            # если ли рядом итемы, если  есть собираем
-            collide = pygame.sprite.spritecollide(self, place.items, True)
-            if collide != []:
-                self.inventory.add(collide)
-                raise MoveFindItem(collide)
             # столкнулись с живностью? взаимодействуем
             collide = pygame.sprite.spritecollide(self, place.life_obj, False)
             if collide != []:
@@ -47,6 +42,18 @@ class Human(monsters.Monsters):
             collide = pygame.sprite.spritecollide(self, place.ladders, False)
             if collide != []:
                 raise FindLadder(collide)
+
+    def collect(self, place):
+        """docstring for collect"""
+        if len(self.inventory) < (INV_WINDOW_SIZE_X * INV_WINDOW_SIZE_Y):
+            collide = pygame.sprite.spritecollide(self, place.items, True)
+            if collide != []:
+                for item  in collide:
+                    x = len(self.inventory)%INV_WINDOW_SIZE_Y
+                    y = len(self.inventory)/INV_WINDOW_SIZE_Y
+                    item.arrange(x,y)
+                    self.inventory.add(collide)
+                raise MoveFindItem(collide)
 
     def draw(self, surface):
         surface.blit(self.image,self.rect)
@@ -71,4 +78,3 @@ class Human(monsters.Monsters):
     def arrange(self, x, y):
         """docstring for arrange"""
         super(Human, self).arrange(x,y)
-        self.inventory.empty()

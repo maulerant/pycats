@@ -24,6 +24,8 @@ SPRITE_SIZE_Y = 30
 
 SIZE_X = 25
 SIZE_Y = 20
+INV_WINDOW_SIZE_X = 5
+INV_WINDOW_SIZE_Y = 5
 
 X = 0
 Y = 1
@@ -44,6 +46,7 @@ OBJECTS_IMAGES = { "human": {   K_DOWN:os.path.join(RESOURCE_DIR,GAMER_AVATAR,"d
                                 K_LEFT:os.path.join(RESOURCE_DIR,GAMER_AVATAR,"left.gif"), 
                                 K_RIGHT:os.path.join(RESOURCE_DIR,GAMER_AVATAR,"right.gif"),}, 
                     "sausage": os.path.join(RESOURCE_DIR,"sausage.gif"), 
+                    "inventory": os.path.join(RESOURCE_DIR,"inventory_bg.gif"), 
                     "clear": os.path.join(RESOURCE_DIR,"clear.gif"), 
                     "wall": os.path.join(RESOURCE_DIR,"wall.gif"), 
                     "animal": { K_DOWN:os.path.join(RESOURCE_DIR,"animal","down.gif"), 
