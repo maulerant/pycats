@@ -51,9 +51,6 @@ import combatlog
 gettext.install("pycats","./locale", unicode=True)
 
 
-
-        
-
 class Game(object):
     """docstring for Game"""
     def __init__(self):
@@ -111,23 +108,6 @@ class Game(object):
         for event in pygame.event.get():
             if event.type == QUIT:
                 sys.exit()
-            elif event.type == KEYDOWN and event.key in (K_UP, K_LEFT, K_DOWN, K_RIGHT):
-                try:
-                    self.human.move_on(self.level,event.key) 
-                except MoveBump as bump:
-                    self.combatlog.push(bump.to_log())
-                    for enemye in bump.enemyes:
-                        try:
-                            message = enemye.combat(self.level.messages)
-                        except Combat as combat:
-                            self.combatlog.push(combat.to_log())
-                except FindLadder as ladders:
-                    self.combatlog.push(ladders.to_log())
-            elif event.type == KEYDOWN and event.key == K_p:
-                try:
-                    self.human.collect(self.level)    
-                except MoveFindItem as finditems:
-                    self.combatlog.push(finditems.to_log())
             elif event.type == KEYDOWN and event.key == K_F1:
                 ladders = pygame.sprite.spritecollide(self.human,self.level.ladders, False)
                 if ladders != None:
@@ -141,6 +121,20 @@ class Game(object):
                 self.combatlog.draw(self.window)
             elif event.type == KEYDOWN and event.key == K_i:
                 self.inventory = not self.inventory
+            else:
+                try:
+                    self.human.events(self.level, event)
+                except MoveBump as bump:
+                    self.combatlog.push(bump.to_log())
+                    for enemye in bump.enemyes:
+                        try:
+                            message = enemye.combat(self.level.messages)
+                        except Combat as combat:
+                            self.combatlog.push(combat.to_log())
+                except FindLadder as ladders:
+                    self.combatlog.push(ladders.to_log())
+                except MoveFindItem as finditems:
+                    self.combatlog.push(finditems.to_log())
 
     def update(self):
         """docstring for update"""

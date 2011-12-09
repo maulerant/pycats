@@ -12,6 +12,7 @@ import monsters
 from settings import *
 from terrain.wall import *
 from exception import *
+from items.inventory import *
 
 class Human(monsters.Monsters):
     """docstring for Human"""
@@ -20,7 +21,7 @@ class Human(monsters.Monsters):
     def __init__(self,x,y):
         """docstring for __init__"""
         monsters.Monsters.__init__(self,x,y)
-        self.inventory = pygame.sprite.Group()
+        self.inventory = Inventory()
 
 
     def move_on(self, place, direction):
@@ -78,3 +79,11 @@ class Human(monsters.Monsters):
     def arrange(self, x, y):
         """docstring for arrange"""
         super(Human, self).arrange(x,y)
+
+    def events(self, place, event):
+        """docstring for events"""
+        if event.type == KEYDOWN and event.key in (K_UP, K_LEFT, K_DOWN, K_RIGHT):
+            self.move_on(place,event.key) 
+        elif event.type == KEYDOWN and event.key == K_p:
+            self.collect(place)    
+
