@@ -16,6 +16,7 @@ from settings import *
 from level import *
 
 
+
 class World(object):
     """docstring for World"""
     def __init__(self):
