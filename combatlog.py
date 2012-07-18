@@ -28,3 +28,6 @@ class CombatLog(object):
         """docstring for draw"""
         for i in range(len(self.events)):
             print self.events[i]
+    
+    def save(self, file_name):
+        pass
