@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Date: Пнд 06 Июн 2011 11:26:51
 File: exception.py
 Author: Igor V. Lashyn
 Description: игровые исключения. 
-'''
+"""
+
 
 class MoveException(Exception):
     """docstring for MoveException"""
+
     def __init__(self):
-       pass
+        pass
 
 
 class MoveBump(MoveException):
     """docstring for MoveBump"""
+
     def __init__(self, enemyes):
         self.enemyes = enemyes
 
@@ -25,9 +28,9 @@ class MoveBump(MoveException):
     def to_log(self):
         """docstring for to_log"""
         return "Bump in %s" % self.enemyes
-        
-class MoveFindItem(MoveException):
 
+
+class MoveFindItem(MoveException):
     def __init__(self, items):
         self.items = items
 
@@ -36,14 +39,16 @@ class MoveFindItem(MoveException):
 
     def to_log(self):
         """docstring for to_log"""
-        return  "Find items: %s" % self.items
+        return "Find items: %s" % self.items
+
 
 class Combat(Exception):
     """docstring for Combat"""
+
     def __init__(self, who, hits):
         self.who = who
         self.hits = hits
-        
+
     def __str__(self):
         print "%s hits %s" % (self.who.name, self.hits)
 
@@ -51,8 +56,10 @@ class Combat(Exception):
         """docstring for to_log"""
         return "%s hits %s" % (self.who.name, self.hits)
 
+
 class FindLadder(Exception):
     """docstring for FindLadder"""
+
     def __init__(self, ladder):
         self.ladder = ladder
 
@@ -61,5 +68,4 @@ class FindLadder(Exception):
 
     def to_log(self):
         """docstring for to_log"""
-        return  "Find ladder: %s" % self.ladder
-    
+        return "Find ladder: %s" % self.ladder

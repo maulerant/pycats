@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Date: Птн 03 Июн 2011 15:23:42
 File: monsters.py
 Author: Igor V. Lashyn
 Description: 
-'''
+"""
 
 import pygame
 import random
@@ -14,13 +14,14 @@ from settings import *
 from events.messages import *
 from exception import *
 
+
 class Animal(monsters.Monsters):
     """docstring for Anymal"""
     name = "animal"
 
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         """docstring for __init__"""
-        monsters.Monsters.__init__(self,x,y)
+        monsters.Monsters.__init__(self, x, y)
         self.timer = 0
         self.inventory = []
         self.message = Messages()
@@ -38,12 +39,12 @@ class Animal(monsters.Monsters):
             self.direction = DIRECTION[direction]
 
             x, y = self.new_position(self.direction[0], self.direction[1])
-            if place.is_free(x,y):
+            if place.is_free(x, y):
                 x_old, y_old = self.location()
                 self.turn(direction)
                 self.image = self.directed_bitmap[direction]
                 for i in range(SPRITE_SIZE_Y):
-                    self.rect.topleft = (x_old * SPRITE_SIZE_X + self.direction[0] * i, y_old * SPRITE_SIZE_Y +  self.direction[1]*i,)
+                    self.rect.topleft = (x_old * SPRITE_SIZE_X + self.direction[0] * i, y_old * SPRITE_SIZE_Y + self.direction[1] * i,)
                     yield None
                 self.rect.topleft = (x * SPRITE_SIZE_X, y * SPRITE_SIZE_Y,)
 
@@ -61,7 +62,8 @@ class Animal(monsters.Monsters):
 
     def hit(self):
         """docstring for hit"""
-        questions = [u"Мяууу!!!", u"Где моя колбаска?", u"Бродят тут всякие..", u"Мяу! Мой хвостик!!", u"Усы, лапы и хвост. Вот мои документы."]
+        questions = [u"Мяууу!!!", u"Где моя колбаска?", u"Бродят тут всякие..", u"Мяу! Мой хвостик!!",
+                     u"Усы, лапы и хвост. Вот мои документы."]
         for question in questions:
             yield question
 

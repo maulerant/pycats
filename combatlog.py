@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Date: Пнд 06 Июн 2011 20:51:25
 File: combatlog.py
 Author: Igor V. Lashyn
 Description: 
-'''
+"""
 
 
 class CombatLog(object):
@@ -28,6 +28,3 @@ class CombatLog(object):
         """docstring for draw"""
         for i in range(len(self.events)):
             print self.events[i]
-    
-    def save(self, file_name):
-        pass
